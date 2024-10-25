@@ -44,15 +44,17 @@ def menu():
     choice: str = input("Ange val: ")
 
     if choice == "1":
-        args = input("commands: ")
-        nm_scan = subprocess.run(["python","nmapscanner.py", *args],
-            capture_output=True
-            # ,capture_stderr=True
-            ,text=True, check=True)
-        print(nm_scan.stdout)
+        print(subprocess.run(["python","nmapscanner.py", "-h"], check=False))
+        
+        args = input("commands: ").split(" ")
+        if len(args) == 1:
+            nm_scan = subprocess.run(["python","nmapscanner.py", args]
+                , check=False)
+        if len(args) > 1:
+            
+            nm_scan = subprocess.run(["python","nmapscanner.py", args[0], args[1]])
     if choice == "2":
-        print("hello")
-        hashtool.main()
+        hash = subprocess.run(["python","nmapscanner.py", args])
     if choice == "3":
         crypto_tool
 

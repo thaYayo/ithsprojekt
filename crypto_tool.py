@@ -14,14 +14,16 @@ import base64
 import keygen
 from cryptography.fernet import Fernet
 
-# Lägg till funktionalitet för att skapa en lösenordsbaserad nyckel med hjälp av PBKDF2.
+
 def pbkdf2_key_from_password(password,salt):
+    '''funktion för att generera nyckel med hjälp av pbkdf2'''
     hash_name = "sha256"
     password_key = hashlib.pbkdf2_hmac(hash_name, password,salt, 200000)
     password_key = base64.urlsafe_b64encode(password_key)
     return password_key
 
 def encrypt(file, key=None, password=None):
+    '''funktion för kryptering av fil med fernet/lösenord(pbkdf2) nyckel'''
     if password:
         salt = os.urandom(16)
         key = pbkdf2_key_from_password(password,salt)
@@ -54,6 +56,7 @@ def encrypt(file, key=None, password=None):
         print(f"Fil har skapats och sparats som: {file_name}.enc")
 
 def decrypt(file,key=None, password=None):
+    '''funktion för dekryptering av fil med fernet/lösenord(pbkdf2 nyckel'''
     with open(file, "rb") as encoded_file:
         data_file = encoded_file.read()
     if key:
@@ -73,6 +76,7 @@ def decrypt(file,key=None, password=None):
         print("Fil dekrypterad!")
 
 def main():
+    '''main program som hanterar argparse för cli commands'''
     parser = argparse.ArgumentParser(description="Kryptera en fil med en befintlig nyckel samt dekryptera en krypterad fil och återställa originalet")
     parser.add_argument("-v", "--verbose", action="store_true", help="Visar utökad info")
 
